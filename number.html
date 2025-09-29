@@ -3,126 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wedding Gift Information</title>
+    <title>Name and ID</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            /* Center everything on the page */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            background-color: #f4f4f9;
+            font-family: Arial, sans-serif;
             text-align: center;
-            padding: 20px;
-        }
-
-        .container {
-            background-color: #ffffff;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 90%;
-            width: 400px;
         }
 
         h1 {
+            font-size: 2.5em;
             color: #333;
-            font-size: 1.5em;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
-        .account-display {
+        .data-container {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            border: 2px solid #d81b60; /* A nice, warm color for a wedding theme */
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
             border-radius: 5px;
-            margin-bottom: 10px;
-            overflow: hidden;
+            background-color: #f9f9f9;
         }
 
-        .account-number {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #333;
-            padding: 10px 15px;
-            flex-grow: 1;
+        #dataField {
+            font-size: 1.2em;
+            padding: 8px;
+            border: none;
+            outline: none;
+            background: none;
+            cursor: default; /* Indicates it's not editable */
+            width: 250px;
             text-align: left;
         }
 
         #copyButton {
-            background-color: #d81b60;
+            padding: 8px 15px;
+            font-size: 1em;
+            background-color: #007bff;
             color: white;
             border: none;
-            padding: 10px 15px;
-            font-size: 1em;
+            border-radius: 4px;
             cursor: pointer;
             transition: background-color 0.3s;
-            height: 100%;
-            border-radius: 0 5px 5px 0;
-            flex-shrink: 0;
         }
 
         #copyButton:hover {
-            background-color: #a01347;
-        }
-        
-        #copyButton:active {
-            background-color: #7b0f37;
+            background-color: #0056b3;
         }
 
-        p {
-            color: #666;
-            margin-top: 15px;
-        }
-
-        .confirmation-message {
-            margin-top: 15px;
+        #copyMessage {
+            margin-top: 10px;
             color: green;
             font-weight: bold;
-            min-height: 1.2em; /* Reserve space to prevent layout shift */
+            visibility: hidden; /* Start hidden */
+            opacity: 0;
+            transition: opacity 0.3s;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>DAMARIS HAYDEÉ SANCHEZ SALDAÑA 🎁</h1>
-        <div class="account-display">
-            <span class="account-number" id="accountNumber">
-                4152314406994668
-            </span>
-            <button id="copyButton">Copy</button>
-        </div>
-        <div class="confirmation-message" id="message"></div>
-        <p>Gracias.</p>
+    <h1>DAMARIS HAYDEE SANCHEZ SALDANA</h1>
+
+    <div class="data-container">
+        <input type="text" id="dataField" value="4152314406994668" readonly>
+        
+        <button id="copyButton" onclick="copyData()">Copy ID</button>
     </div>
 
+    <p id="copyMessage">ID Copied! ✅</p>
+
     <script>
-        document.getElementById('copyButton').addEventListener('click', function() {
-            // 1. Get the account number text
-            const accountNumberElement = document.getElementById('accountNumber');
-            const accountNumber = accountNumberElement.textContent.trim();
-            const messageElement = document.getElementById('message');
-            
-            // 2. Use the modern Clipboard API to copy the text
-            navigator.clipboard.writeText(accountNumber)
+        /**
+         * Copies the content of the input field to the clipboard
+         * using the modern Clipboard API.
+         */
+        function copyData() {
+            const dataToCopy = document.getElementById('dataField').value;
+            const messageElement = document.getElementById('copyMessage');
+
+            // Use the modern asynchronous Clipboard API for copying
+            navigator.clipboard.writeText(dataToCopy)
                 .then(() => {
-                    // 3. Success Feedback
-                    messageElement.textContent = 'Copied to clipboard! ✅';
-                    // Clear the message after 3 seconds
+                    // Show confirmation message
+                    messageElement.style.visibility = 'visible';
+                    messageElement.style.opacity = '1';
+
+                    // Hide confirmation message after 2 seconds
                     setTimeout(() => {
-                        messageElement.textContent = '';
-                    }, 3000);
+                        messageElement.style.opacity = '0';
+                        // Use a slight delay before changing visibility so the fade-out works
+                        setTimeout(() => {
+                            messageElement.style.visibility = 'hidden';
+                        }, 300); 
+                    }, 2000);
                 })
                 .catch(err => {
-                    // 4. Error/Fallback Feedback (for older browsers)
-                    messageElement.textContent = 'Could not copy. Please select and copy manually.';
-                    console.error('Failed to copy text: ', err);
+                    // Fallback for older browsers (or if permission is denied)
+                    console.error('Could not copy text: ', err);
+                    alert("Failed to copy. Please copy the number manually: " + dataToCopy);
                 });
-        });
+        }
     </script>
 
 </body>
